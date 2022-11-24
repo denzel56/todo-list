@@ -2,4 +2,40 @@
 
 h1 {
   margin-bottom: 30px;
+  text-align: center;
+  }
+  
+  .listContainer {
+    width: 80%;
+    margin: 20px auto;
+  }
+  
+  .todoList {
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  .todoListItem {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    border: 2px solid gainsboro;
+    border-radius: 15px;
+  }
+  
+  .descrWrap {
+    margin: 0 10px;
+  }
+  
+  .todoListItem h3 {
+    margin: 0;
+    text-transform: uppercase;
+  }
+  
+  .todoList img {
+    display: block;
+    width: 200px;
+    margin-top: 10px;
 }

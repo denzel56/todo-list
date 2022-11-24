@@ -6,7 +6,7 @@ import { TodoContext } from './Context/todoContext'
 function App() {
   return (
     <TodoContext.Provider value={{
-      todoList: []
+      list: []
     }} >
       <div className="App">
         <TodoPage />

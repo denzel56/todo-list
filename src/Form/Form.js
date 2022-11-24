@@ -1,26 +1,67 @@
-import { useContext, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Input from '../Input/Input';
 
-import { TodoContext } from '../Context/todoContext';
 import s from './Form.module.css';
 
-const Form = () => {
+
+const getBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event) => resolve(event.target.result));
+    reader.addEventListener('error', (error) => reject(error));
+    reader.readAsDataURL(file);
+  })
+}
+
+const Form = ({ myList }) => {
   const [todoItem, setTodoItem] = useState({});
+  const [taskFile, setTaskFile] = useState({});
   const ref = useRef(null);
-  const todoList = useContext(TodoContext);
+
+  const convertFile = (userFile) => {
+    const taskFile = userFile;
+
+    for (const file of taskFile) {
+
+      getBase64(file).then((fileAsBase64) => {
+        console.log('file64', file);
+
+        setTaskFile(prevState => ({
+          ...prevState,
+          name: file.name,
+          type: file.type,
+          fileUrl: fileAsBase64
+        }))
+
+      }).catch((err) => {
+        console.log('error >>>', err);
+      });
+    }
+
+  }
 
   const handleChangeForm = (e) => {
-    console.log(e.target.value);
-    setTodoItem(prevState => ({
-      ...prevState,
-      [e.target.name]: e.target.name === 'file' ? e.target.files : e.target.value,
-    }))
+
+    if (e.target.name === 'file') {
+      convertFile(e.target.files)
+    } else {
+      setTodoItem(prevState => ({
+        ...prevState,
+        [e.target.name]: e.target.value
+      }))
+    }
+
   }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     console.log('state >>> ', todoItem);
-    console.log('context >>> ', todoItem.file);
+    console.log('file >>> ', taskFile);
+
+    myList && myList(todoItem, taskFile);
 
     ref.current.reset();
   }
@@ -44,7 +85,7 @@ const Form = () => {
         <label htmlFor="taget-date">
           <Input
             type="date"
-            name="taget-date"
+            name="date"
           />
         </label>
         <label htmlFor="file">
@@ -53,7 +94,7 @@ const Form = () => {
             name="file"
           />
         </label>
-        <button type="submit">Добавить задачу</button>
+        <button type="submit" >Добавить задачу</button>
       </form>
     </div>
   );
