@@ -3,39 +3,85 @@
 h1 {
   margin-bottom: 30px;
   text-align: center;
-  }
-  
-  .listContainer {
-    width: 80%;
-    margin: 20px auto;
-  }
-  
-  .todoList {
-    padding: 0;
-    list-style-type: none;
-  }
-  
-  .todoListItem {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin: 10px 0;
+}
+
+.listContainer {
+  width: 80%;
+  margin: 20px auto;
+}
+
+.todoList {
+  padding: 0;
+  list-style-type: none;
+}
+
+.todoListItem {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  /* flex-wrap: wrap; */
+  margin: 10px 0;
     padding: 10px;
     border: 2px solid gainsboro;
     border-radius: 15px;
   }
-  
-  .descrWrap {
-    margin: 0 10px;
+
+                .miss {
+                  background-color: rgba(247, 94, 37, 0.85);
+                }
+        
+                .done {
+                  background-color: palegreen;
+                }
+.descrWrap {
+  margin: 0 20px;
+    width: 55%;
   }
-  
+
   .todoListItem h3 {
     margin: 0;
     text-transform: uppercase;
   }
-  
-  .todoList img {
-    display: block;
-    width: 200px;
+.imageWrap {
+  width: 25%;
+}
+
+.imageWrap img {
+  display: block;
+  width: 100%;
     margin-top: 10px;
+}
+
+.resultButtonsWrap {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  width: 20%;
+  height: 100px;
+}
+
+.doneIcon,
+.delIcon,
+.editIcon {
+  width: 30px;
+}
+
+.doneIcon:hover,
+.delIcon:hover,
+.editIcon:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.doneIcon {
+  fill: forestgreen;
+}
+
+.delIcon {
+  fill: crimson;
+}
+
+.editIcon {
+  fill: darkgrey;
 }
