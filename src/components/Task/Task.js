@@ -8,7 +8,7 @@ import { ReactComponent as EditIcon } from '../../assets/edit.svg';
 import s from './style.module.css';
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "../../taskServices/taskApi";
 
-const Task = ({ id, title, description, date, fileUrl, fileName, isDone, onEdit }) => {
+const Task = ({ id, title, description, date, fileUrl, fileName, isDone, isMiss, onEdit }) => {
 
   const [remove] = useDeleteTaskMutation();
   const [update] = useUpdateTaskMutation();
@@ -34,6 +34,7 @@ const Task = ({ id, title, description, date, fileUrl, fileName, isDone, onEdit 
 
   return (
     <div className={cn(s.root, {
+      [s.miss]: isMiss,
       [s.done]: isDone
     })}>
       <div className={s.taskInfoWrap}>

@@ -9,6 +9,10 @@
   background-color: lightgreen;
 }
 
+.miss {
+  background-color: lightcoral;
+}
+
 .taskInfoWrap {
   display: flex;
   justify-content: space-between;

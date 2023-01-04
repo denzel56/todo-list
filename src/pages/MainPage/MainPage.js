@@ -4,18 +4,33 @@ import cn from 'classnames';
 import Form from '../../components/Form';
 import Task from '../../components/Task';
 
-import { useFetchAllTasksQuery } from '../../taskServices/taskApi';
+import { useFetchAllTasksQuery, useUpdateTaskMutation } from '../../taskServices/taskApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { taskData, taskDataSelector } from '../../store/taskSlice';
+
+import { ReactComponent as Spinner } from '../../assets/spinner-solid.svg'
 
 import s from './MainPage.module.css';
 
 
 const MainPage = () => {
-  const [isEdit, setIsEdit] = useState(false);
   const { data, error, isLoading } = useFetchAllTasksQuery();
   const dispatch = useDispatch();
   const taskItem = useSelector(taskDataSelector);
+  const [update] = useUpdateTaskMutation();
+  const now = Date.now();
+
+  useEffect(() => {
+    data && data.map((item) => {
+      if (now > new Date(item.date.split('-'))) {
+        console.log(new Date(item.date.split('-')));
+        update({
+          ...item,
+          'isMiss': true
+        });
+      }
+    })
+  }, [data])
 
   /**
    * @type { object } Дата сейчас
@@ -34,7 +49,6 @@ const MainPage = () => {
           ...item,
           'isEdit': true
         }));
-        setIsEdit(true);
       }
     })
   }
@@ -44,12 +58,9 @@ const MainPage = () => {
       <h1>ToDo List</h1>
       <Form
         isEdit
-      // id={isEdit ? taskItem.id : null}
-      // title={isEdit && taskItem.title}
-      // description={isEdit && taskItem.description}
-      // date={isEdit && taskItem.date}
       />
       <div className={s.listContainer}>
+        {isLoading && <div className={s.spinner}> <Spinner /> </div>}
         {
           data && data.map((item, key) => {
             return (
@@ -62,6 +73,7 @@ const MainPage = () => {
                 fileUrl={item.fileUrl}
                 fileName={item.fileName}
                 isDone={item.isDone}
+                isMiss={item.isMiss}
                 onEdit={handleEdit}
               />
             )
