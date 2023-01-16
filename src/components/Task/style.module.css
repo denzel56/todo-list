@@ -10,7 +10,7 @@
 }
 
 .miss {
-  background-color: lightcoral;
+  background-color: rgba(255, 148, 148, 0.4);
 }
 
 .taskInfoWrap {
