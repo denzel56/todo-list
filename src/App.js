@@ -1,10 +1,10 @@
 import './App.css';
-import TodoPage from './TodoPage';
+import MainPage from './pages/MainPage'
 
 function App() {
   return (
       <div className="App">
-        <TodoPage />
+      <MainPage />
     </div>
   );
 }

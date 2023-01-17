@@ -1,0 +1,70 @@
+.root {
+  margin: 10px auto;
+  background-color: whitesmoke;
+  border: 1px solid silver;
+  border-radius: 5px;
+}
+
+.done {
+  background-color: lightgreen;
+}
+
+.miss {
+  background-color: rgba(255, 148, 148, 0.4);
+}
+
+.taskInfoWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.taskText {
+  width: 65%;
+  text-align: center;
+}
+
+.taskFile {
+  width: 30%;
+}
+
+.taskFile img {
+  display: block;
+  margin: 0;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.buttonsWrap {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 10px auto;
+  width: 150px;
+}
+
+.buttonsWrap svg {
+  width: 30px;
+  transition: all ease-in-out 0.2s;
+}
+
+.buttonsWrap svg:hover {
+  transform: scale(1.2);
+}
+
+.buttonsWrap svg:active {
+  transform: scale(0.8);
+}
+
+.doneButton {
+  fill: #19b80b;
+}
+
+.editButton {
+  fill: #ffd800;
+}
+
+.delButton {
+  fill: #fa0000;
+}

@@ -1,0 +1,51 @@
+.root {}
+
+h1 {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.listContainer {
+  width: 80%;
+  margin: 20px auto;
+}
+
+.todoList {
+  padding: 0;
+  list-style-type: none;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner svg {
+  margin-left: 10px;
+  width: 35px;
+  fill: #1e90ff;
+  animation: isLoading 1.5s linear infinite;
+}
+
+@keyframes isLoading {
+  from {
+    transform: none;
+  }
+
+  25% {
+    transform: rotate(90deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  75% {
+    transform: rotate(270deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
