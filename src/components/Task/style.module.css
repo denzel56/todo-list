@@ -1,52 +1,69 @@
 .root {
-  margin: 10px auto;
-  background-color: whitesmoke;
-  border: 1px solid silver;
-  border-radius: 5px;
-}
-
-.done {
-  background-color: lightgreen;
-}
-
-.miss {
-  background-color: rgba(255, 148, 148, 0.4);
-}
-
-.taskInfoWrap {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 5px;
+  margin: 10px auto;
+  padding: 10px 0;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, #fff 0%, #2af7ed 35%, #fff 100%);
+  border-image-slice: 1;
+  border-radius: 5px;
+}
+
+.warningIcon {
+  fill: #fde910;
+}
+
+.done {
+  background-color: rgba(0, 250, 154, 0.3);
+  text-decoration: line-through;
+}
+
+.miss {
+  fill: red;
 }
 
 .taskText {
-  width: 65%;
-  text-align: center;
+  width: 80%;
+  font-size: 17px;
 }
 
-.taskFile {
-  width: 30%;
+.deadline {
+  margin-top: 3px;
+  font-size: 15px;
+  color: #919192;
 }
 
-.taskFile img {
-  display: block;
-  margin: 0;
-  border-radius: 5px;
-  width: 100%;
+.deadline svg {
+  width: 15px;
+  margin-left: 5px;
 }
 
 .buttonsWrap {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
   margin: 10px auto;
-  width: 150px;
+  width: 80px;
 }
 
 .buttonsWrap svg {
-  width: 30px;
+  width: 18px;
+  margin-left: 5px;
   transition: all ease-in-out 0.2s;
+}
+
+.editButton {
+  fill: #919192;
+}
+
+.buttonsWrap .delButton {
+  fill: #919192;
+  transform: rotate(45deg);
+}
+
+.buttonsWrap .delButton:hover {
+  transform: rotate(45deg) scale(1.2);
 }
 
 .buttonsWrap svg:hover {
@@ -55,16 +72,4 @@
 
 .buttonsWrap svg:active {
   transform: scale(0.8);
-}
-
-.doneButton {
-  fill: #19b80b;
-}
-
-.editButton {
-  fill: #ffd800;
-}
-
-.delButton {
-  fill: #fa0000;
 }

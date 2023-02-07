@@ -18,12 +18,23 @@ const MainPage = () => {
   const dispatch = useDispatch();
   const taskItem = useSelector(taskDataSelector);
   const [update] = useUpdateTaskMutation();
-  const now = Date.now();
+
+  const day = new Date().getDate();
+  const month = (new Date().getMonth() + 1);
+  const year = new Date().getFullYear();
+  const now = new Date([year, month, day]);
+
 
   useEffect(() => {
     data && data.map((item) => {
+      if (now.getTime() === new Date(item.date.split('-')).getTime()) {
+        update({
+          ...item,
+          'isWarning': true
+        });
+      }
+
       if (now > new Date(item.date.split('-'))) {
-        console.log(new Date(item.date.split('-')));
         update({
           ...item,
           'isMiss': true
@@ -32,16 +43,6 @@ const MainPage = () => {
     })
   }, [data])
 
-  /**
-   * @type { object } Дата сейчас
-   */
-
-  /**
-   * Функциия принимает объект значений из полей формы и файл загруженный пользователем и объединяет их в один объект, также добавляет свойства isDone(выполнение задачи) и isMiss(задача просрочена)
-   * Также функция обнуляет стейт для редактирования
-   * @param { object } itemList Объект значений введёных в форму
-   * @param { object } itemFile Объект свойств файла
-   */
   const handleEdit = (id) => {
     data.map((item) => {
       if (item.id === id) {
@@ -74,6 +75,7 @@ const MainPage = () => {
                 fileName={item.fileName}
                 isDone={item.isDone}
                 isMiss={item.isMiss}
+                isWarning={item.isWarning}
                 onEdit={handleEdit}
               />
             )
