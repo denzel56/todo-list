@@ -1,30 +1,30 @@
 .root {
-  width: 50%;
+  width: 80%;
   margin: 0 auto;
 }
 
 form {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.inputWrap {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
 }
 
-.descr {
-  margin: 5px 0;
-  padding: 5px 10px;
-  width: 350px;
-  border: 1px solid lightgray;
-  border-radius: 10px;
-}
-
 button {
-  margin: 20px 0;
-  padding: 15px;
-  background-color: lightcyan;
-  border: 1px solid lightgray;
-  border-radius: 10px;
-  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  background-color: #2af7ed;
+  border: none;
+  border-radius: 50%;
   transition: all 0.3s ease-in-out;
 }
 
@@ -34,4 +34,9 @@ button:hover {
 
 button:active {
   transform: scale(0.9);
+}
+
+svg {
+  width: 25px;
+  fill: #919192;
 }

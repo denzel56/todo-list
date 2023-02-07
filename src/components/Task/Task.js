@@ -1,21 +1,20 @@
 import cn from "classnames";
 import dayjs from "dayjs";
 
-import { ReactComponent as DelIcon } from '../../assets/x-del.svg';
-import { ReactComponent as DoneIcon } from '../../assets/done.svg';
-import { ReactComponent as EditIcon } from '../../assets/edit.svg';
+import { ReactComponent as DelIcon } from '../../assets/plus-solid.svg';
+import { ReactComponent as DoneIcon } from '../../assets/check-solid.svg';
+import { ReactComponent as EditIcon } from '../../assets/pen-solid.svg';
+import { ReactComponent as WarningIcon } from '../../assets/warning.svg';
 
 import s from './style.module.css';
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "../../taskServices/taskApi";
 
-const Task = ({ id, title, description, date, fileUrl, fileName, isDone, isMiss, onEdit }) => {
+const Task = ({ id, title, date, isDone, isMiss, isWarning, onEdit }) => {
 
   const [remove] = useDeleteTaskMutation();
   const [update] = useUpdateTaskMutation();
-  const now = Date.now();
 
   const handleClickDone = (e) => {
-    console.log('done', id);
     update({
       'isDone': !isDone,
       id,
@@ -23,29 +22,23 @@ const Task = ({ id, title, description, date, fileUrl, fileName, isDone, isMiss,
   }
 
   const handleClickDel = (e) => {
-    console.log('del', id);
     remove(id);
   }
 
   const handleClickEdit = (e) => {
     onEdit && onEdit(id);
-    console.log('edit', id);
   }
 
   return (
     <div className={cn(s.root, {
-      [s.miss]: isMiss,
       [s.done]: isDone
     })}>
-      <div className={s.taskInfoWrap}>
         <div className={s.taskText}>
-          <h3>{title}</h3>
-          <p>{description}</p>
-          <p>Дата окончания: {date}</p>
-        </div>
-        <div className={s.taskFile}>
-          <img src={fileUrl} alt={fileName} />
-        </div>
+        <span>{title}</span>
+        <p className={s.deadline}>До: {date}
+          {isWarning && <WarningIcon className={s.warningIcon} />}
+          {isMiss && <WarningIcon className={s.miss} />}
+        </p>
       </div>
       <div className={s.buttonsWrap}>
         <DoneIcon

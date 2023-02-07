@@ -1,7 +1,13 @@
-.root {}
+.root {
+  width: 400px;
+  margin: 10vh auto;
+  padding: 15px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  border-radius: 21px;
+}
 
 h1 {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   text-align: center;
 }
 
