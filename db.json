@@ -21,7 +21,7 @@
       "title": "Cделать проект заметок",
       "id": 1675677574598,
       "isDone": true,
-      "isMiss": false,
+      "isMiss": true,
       "date": "2023-02-21",
       "isEdit": true,
       "isWarning": false
@@ -30,8 +30,8 @@
       "title": "Самая интересная задача",
       "id": 1675692593699,
       "isDone": false,
-      "isMiss": false,
-      "isWarning": true,
+      "isMiss": true,
+      "isWarning": false,
       "date": "2023-02-06"
     },
     {

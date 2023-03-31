@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
-import cn from 'classnames';
+import { React, useEffect } from 'react';
+
+import { useDispatch } from 'react-redux';
+import { taskData } from '../../store/taskSlice';
+import { useFetchAllTasksQuery, useUpdateTaskMutation } from '../../taskServices/taskApi';
+
+// import app from '../../database/firebase';
+
+import { ReactComponent as Spinner } from '../../assets/spinner-solid.svg'
 
 import Form from '../../components/Form';
 import Task from '../../components/Task';
-
-import { useFetchAllTasksQuery, useUpdateTaskMutation } from '../../taskServices/taskApi';
-import { useDispatch, useSelector } from 'react-redux';
-import { taskData, taskDataSelector } from '../../store/taskSlice';
-
-import { ReactComponent as Spinner } from '../../assets/spinner-solid.svg'
 
 import s from './MainPage.module.css';
 
 
 const MainPage = () => {
-  const { data, error, isLoading } = useFetchAllTasksQuery();
+  const { data, isLoading } = useFetchAllTasksQuery();
   const dispatch = useDispatch();
-  const taskItem = useSelector(taskDataSelector);
   const [update] = useUpdateTaskMutation();
 
   const day = new Date().getDate();
@@ -26,21 +26,26 @@ const MainPage = () => {
 
 
   useEffect(() => {
-    data && data.map((item) => {
-      if (now.getTime() === new Date(item.date.split('-')).getTime()) {
-        update({
-          ...item,
-          'isWarning': true
-        });
-      }
+    if (data) {
+      data.map((item) => {
+        if (now.getTime() === new Date(item.date.split('-')).getTime()) {
+          update({
+            ...item,
+            'isWarning': true
+          });
+        }
 
-      if (now > new Date(item.date.split('-'))) {
-        update({
-          ...item,
-          'isMiss': true
-        });
-      }
+        if (now > new Date(item.date.split('-'))) {
+          update({
+            ...item,
+            'isWarning': false,
+            'isMiss': true
+          });
+        }
+
+        return item
     })
+  }
   }, [data])
 
   const handleEdit = (id) => {
@@ -51,6 +56,8 @@ const MainPage = () => {
           'isEdit': true
         }));
       }
+
+      return item
     })
   }
 
@@ -63,10 +70,9 @@ const MainPage = () => {
       <div className={s.listContainer}>
         {isLoading && <div className={s.spinner}> <Spinner /> </div>}
         {
-          data && data.map((item, key) => {
-            return (
+          data && data.map((item) => (
               <Task
-                key={key}
+                key={item.id}
                 id={item.id}
                 title={item.title}
                 description={item.description}
@@ -79,7 +85,7 @@ const MainPage = () => {
                 onEdit={handleEdit}
               />
             )
-          })
+          )
         }
       </div>
     </div>

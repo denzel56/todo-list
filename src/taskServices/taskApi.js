@@ -12,6 +12,7 @@ export const taskApi = createApi({
         url: '/tasks',
 
       }),
+      // eslint-disable-next-line
       providesTags: result => ['Tasks']
     }),
     createTask: build.mutation({

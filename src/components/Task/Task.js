@@ -1,32 +1,36 @@
+import React from "react";
 import cn from "classnames";
-import dayjs from "dayjs";
+import PropTypes from 'prop-types';
 
 import { ReactComponent as DelIcon } from '../../assets/plus-solid.svg';
 import { ReactComponent as DoneIcon } from '../../assets/check-solid.svg';
 import { ReactComponent as EditIcon } from '../../assets/pen-solid.svg';
 import { ReactComponent as WarningIcon } from '../../assets/warning.svg';
 
-import s from './style.module.css';
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "../../taskServices/taskApi";
+
+import s from './style.module.css';
 
 const Task = ({ id, title, date, isDone, isMiss, isWarning, onEdit }) => {
 
   const [remove] = useDeleteTaskMutation();
   const [update] = useUpdateTaskMutation();
 
-  const handleClickDone = (e) => {
+  const handleClickDone = () => {
     update({
       'isDone': !isDone,
       id,
     })
   }
 
-  const handleClickDel = (e) => {
+  const handleClickDel = () => {
     remove(id);
   }
 
-  const handleClickEdit = (e) => {
-    onEdit && onEdit(id);
+  const handleClickEdit = () => {
+    if(onEdit && onEdit()) {
+      onEdit(id);
+    };
   }
 
   return (
@@ -57,6 +61,26 @@ const Task = ({ id, title, date, isDone, isMiss, isWarning, onEdit }) => {
     </div>
   )
 
+}
+
+Task.defaultProps = {
+  id: 0,
+  title: "",
+  date: "",
+  isDone: false,
+  isMiss: false,
+  isWarning: false,
+  onEdit: false
+}
+
+Task.propTypes = {
+  id: PropTypes.number,
+  title: PropTypes.string,
+  date: PropTypes.string,
+  isDone: PropTypes.bool,
+  isMiss: PropTypes.bool,
+  isWarning: PropTypes.bool,
+  onEdit: PropTypes.bool
 }
 
 export default Task;

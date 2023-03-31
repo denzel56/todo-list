@@ -9,6 +9,7 @@ export const taskSlice = createSlice({
   initialState,
   reducers: {
     taskData: (state, action) => {
+      // eslint-disable-next-line
       state.todoItem = {
         ...state.todoItem,
         ...action.payload

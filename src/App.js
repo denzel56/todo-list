@@ -1,12 +1,18 @@
-import './App.css';
-import MainPage from './pages/MainPage'
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-function App() {
-  return (
+import MainPage from './pages/MainPage';
+
+import './App.css';
+import AuthPage from './pages/AuthPage';
+
+const App = () => (
       <div className="App">
-      <MainPage />
+        <Routes>
+          <Route index element={<MainPage />} />
+          <Route path='auth' element={<AuthPage />} />
+        </Routes>
     </div>
   );
-}
 
 export default App;
