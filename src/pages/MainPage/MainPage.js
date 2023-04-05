@@ -15,6 +15,7 @@ import s from './MainPage.module.css';
 
 
 const MainPage = () => {
+  const uid = localStorage.getItem('todoUid');
   const { data, isLoading } = useFetchAllTasksQuery();
   const dispatch = useDispatch();
   const [update] = useUpdateTaskMutation();
@@ -29,14 +30,14 @@ const MainPage = () => {
     if (data) {
       data.map((item) => {
         if (now.getTime() === new Date(item.date.split('-')).getTime()) {
-          update({
+          update(uid, {
             ...item,
             'isWarning': true
           });
         }
 
         if (now > new Date(item.date.split('-'))) {
-          update({
+          update(uid, {
             ...item,
             'isWarning': false,
             'isMiss': true
@@ -46,6 +47,7 @@ const MainPage = () => {
         return item
     })
   }
+  // eslint-disable-next-line
   }, [data])
 
   const handleEdit = (id) => {

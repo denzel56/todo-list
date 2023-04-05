@@ -12,6 +12,7 @@ import { useDeleteTaskMutation, useUpdateTaskMutation } from "../../taskServices
 import s from './style.module.css';
 
 const Task = ({ id, title, date, isDone, isMiss, isWarning, onEdit }) => {
+  const uid = localStorage.getItem('todoUid');
 
   const [remove] = useDeleteTaskMutation();
   const [update] = useUpdateTaskMutation();
@@ -24,7 +25,7 @@ const Task = ({ id, title, date, isDone, isMiss, isWarning, onEdit }) => {
   }
 
   const handleClickDel = () => {
-    remove(id);
+    remove(uid, id);
   }
 
   const handleClickEdit = () => {

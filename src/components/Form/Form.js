@@ -1,8 +1,11 @@
 import { React, useEffect, useRef, useState } from 'react';
+import { getDatabase, ref, set } from 'firebase/database'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { taskDataSelector, taskData } from '../../store/taskSlice';
 import { useCreateTaskMutation, useUpdateTaskMutation } from '../../taskServices/taskApi';
+
+import { firebaseApp } from '../../database/firebase'
 
 import { ReactComponent as PlusIcon } from '../../assets/plus-solid.svg'
 import { ReactComponent as CheckIcon } from '../../assets/check-solid.svg'
@@ -14,15 +17,17 @@ import s from './Form.module.css';
 
 // isEdit, id, title, date
 const Form = () => {
+  const uid = localStorage.getItem('todoUid');
   const [edit, setEdit] = useState(false);
   const [id, setID] = useState(undefined);
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
+   // eslint-disable-next-line
   const [create] = useCreateTaskMutation();
   const [update] = useUpdateTaskMutation();
   const taskItem = useSelector(taskDataSelector);
   const dispatch = useDispatch();
-  const ref = useRef(null);
+  const refForm = useRef(null);
 
 
 
@@ -48,11 +53,14 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(taskItem);
 
     if (edit) {
-      update(taskItem)
+      update(uid, taskItem)
     } else {
-      create(taskItem)
+      // create(uid, taskItem)
+      const db = getDatabase(firebaseApp);
+      set(ref(db, `/${uid}/${taskItem.id}`), taskItem);
     };
 
     setEdit(false);
@@ -60,13 +68,13 @@ const Form = () => {
     setTitle('');
     setDate('');
 
-    ref.current.reset();
+    refForm.current.reset();
   }
 
   return (
     <div className={s.root}>
       <form
-        ref={ref}
+        ref={refForm}
         onSubmit={handleSubmit}
         onChange={handleChange}
       >

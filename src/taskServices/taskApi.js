@@ -4,36 +4,35 @@ export const taskApi = createApi({
   reducerPath: 'taskApi',
   tagTypes: ['Tasks'],
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:4000/'
+    baseUrl: 'https://todo-list-52bdd-default-rtdb.europe-west1.firebasedatabase.app/'
   }),
   endpoints: (build) => ({
     fetchAllTasks: build.query({
-      query: () => ({
-        url: '/tasks',
-
+      query: (uid) => ({
+        url: `/${uid}`,
       }),
       // eslint-disable-next-line
       providesTags: result => ['Tasks']
     }),
     createTask: build.mutation({
-      query: (body) => ({
-        url: '/tasks',
+      query: (uid,body) => ({
+        url: `/${uid}`,
         method: 'POST',
         body
       }),
       invalidatesTags: ['Tasks']
     }),
     updateTask: build.mutation({
-      query: ({ id, ...rest }) => ({
-        url: `/tasks/${id}`,
+      query: ({uid, id, ...rest }) => ({
+        url: `/${uid}/${id}`,
         method: 'PATCH',
         body: rest
       }),
       invalidatesTags: ['Tasks']
     }),
     deleteTask: build.mutation({
-      query: (id) => ({
-        url: `/tasks/${id}`,
+      query: (uid, id) => ({
+        url: `/${uid}/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Tasks']
