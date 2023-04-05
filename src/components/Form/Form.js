@@ -15,14 +15,13 @@ import Input from '../Input/Input';
 import s from './Form.module.css';
 
 
-// isEdit, id, title, date
 const Form = () => {
   const uid = localStorage.getItem('todoUid');
   const [edit, setEdit] = useState(false);
   const [id, setID] = useState(undefined);
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [create] = useCreateTaskMutation();
   const [update] = useUpdateTaskMutation();
   const taskItem = useSelector(taskDataSelector);
