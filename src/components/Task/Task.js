@@ -71,7 +71,7 @@ Task.defaultProps = {
   isDone: false,
   isMiss: false,
   isWarning: false,
-  onEdit: false
+  onEdit: null
 }
 
 Task.propTypes = {
@@ -81,7 +81,7 @@ Task.propTypes = {
   isDone: PropTypes.bool,
   isMiss: PropTypes.bool,
   isWarning: PropTypes.bool,
-  onEdit: PropTypes.bool
+  onEdit: PropTypes.func
 }
 
 export default Task;

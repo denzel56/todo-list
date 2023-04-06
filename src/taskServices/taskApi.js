@@ -1,29 +1,56 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
+import { getDatabase, ref, get, child, set } from 'firebase/database';
+import { firebaseApp } from '../database/firebase';
+
+const db = getDatabase(firebaseApp);
+const uid = localStorage.getItem('todoUid')
 
 export const taskApi = createApi({
   reducerPath: 'taskApi',
   tagTypes: ['Tasks'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://todo-list-52bdd-default-rtdb.europe-west1.firebasedatabase.app/'
-  }),
+  baseQuery: fakeBaseQuery(),
   endpoints: (build) => ({
     fetchAllTasks: build.query({
-      query: (uid) => ({
-        url: `/${uid}`,
-      }),
+      async queryFn() {
+        const dbRef = ref(db);
+        const result = [];
+
+        await get(child(dbRef, `/${uid}`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            const tasks = snapshot.val();
+
+            Object.values(tasks).map((item) => {
+              result.push(item);
+
+              return item
+            })
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+          return { data: result }
+      },
       // eslint-disable-next-line
       providesTags: result => ['Tasks']
     }),
     createTask: build.mutation({
-      query: (uid,body) => ({
-        url: `/${uid}`,
-        method: 'POST',
-        body
-      }),
+      // query: (uid,body) => ({
+      //   url: `/${uid}`,
+      //   method: 'POST',
+      //   body
+      // }),
+      queryFn(task) {
+        console.log(uid);
+        console.log(task);
+        const dbRef = ref(db, `/${uid}/${task.id}`);
+        set(dbRef, task);
+      },
       invalidatesTags: ['Tasks']
     }),
     updateTask: build.mutation({
-      query: ({uid, id, ...rest }) => ({
+      query: ({ id, ...rest }) => ({
         url: `/${uid}/${id}`,
         method: 'PATCH',
         body: rest
@@ -31,7 +58,7 @@ export const taskApi = createApi({
       invalidatesTags: ['Tasks']
     }),
     deleteTask: build.mutation({
-      query: (uid, id) => ({
+      query: (id) => ({
         url: `/${uid}/${id}`,
         method: 'DELETE',
       }),
