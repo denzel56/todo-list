@@ -1,7 +1,13 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { EmailAuthProvider, linkWithCredential, signInWithEmailAndPassword } from "firebase/auth";
+
 import Input from "../../components/Input";
 
+import auth from "../../database/firebase";
+
 import s from './AuthPage.module.css';
+
 
 const AuthPage = () => {
   // eslint-disable-next-line
@@ -13,6 +19,8 @@ const AuthPage = () => {
     })
 
   const ref = useRef(null);
+  const navigate = useNavigate();
+
 
   const handleChange = () => {
     setForm({
@@ -23,7 +31,38 @@ const AuthPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('send', form);
+
+    const {email, password} = form;
+
+    if (form.password.length < 6) {
+      alert('пароль дожен содержать не меньше 6 симвоов');
+      return
+    }
+
+
+    if (ref.current.name === 'Register') {
+      const credential = EmailAuthProvider.credential(email, password);
+      linkWithCredential(auth.currentUser, credential)
+      .then((usercred) => {
+        const {user} = usercred;
+        console.log("Anonymous account successfully upgraded", user);
+      }).catch((error) => {
+        console.log("Error upgrading anonymous account", error);
+      });
+    }
+
+    if (ref.current.name === 'Login') {
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          // Signed in
+          navigate('/');
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error(errorCode, errorMessage);
+        });
+    }
 
 
     localStorage.removeItem('email');
@@ -45,7 +84,7 @@ const AuthPage = () => {
       <form
         onSubmit={handleSubmit}
         ref={ref}
-        name={isLogin ? 'Login' : 'Reister'}
+        name={isLogin ? 'Login' : 'Register'}
       >
         <div className={s.inputWrap}>
           <Input

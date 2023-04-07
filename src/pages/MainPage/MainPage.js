@@ -1,11 +1,10 @@
-import { React, useEffect} from 'react';
-// import { getDatabase, ref, onValue, child, get } from 'firebase/database';
+import { React, useEffect, useState} from 'react';
+import { getDatabase, ref, onValue, child, get, update } from 'firebase/database';
 import { useDispatch } from 'react-redux';
-// import { firebaseApp } from '../../database/firebase';
+import { firebaseApp } from '../../database/firebase';
 
 
 import { taskData } from '../../store/taskSlice';
-import { useFetchAllTasksQuery, useUpdateTaskMutation } from '../../taskServices/taskApi';
 
 import { ReactComponent as Spinner } from '../../assets/spinner-solid.svg'
 
@@ -17,57 +16,62 @@ import s from './MainPage.module.css';
 
 const MainPage = () => {
   const uid = localStorage.getItem('todoUid');
-  const { data, isLoading } = useFetchAllTasksQuery(uid);
   const dispatch = useDispatch();
-  const [update] = useUpdateTaskMutation();
-  // const [data, setData] = useState({});
+  const [data, setData] = useState({});
+  const [isLoading, setLoading] = useState(false);
 
   const day = new Date().getDate();
   const month = (new Date().getMonth() + 1);
   const year = new Date().getFullYear();
   const now = new Date([year, month, day]);
 
-  // const db = getDatabase(firebaseApp);
-
-
-  // useEffect(() => {
-  //   const dbRef = ref(db);
-
-  //   get(child(dbRef, `/${uid}`)).then((snapshot) => {
-  //     if (snapshot.exists()) {
-  //       console.log(snapshot.val());
-  //       setData(snapshot.val());
-  //     } else {
-  //       console.log("No data available");
-  //     }
-  //   }).catch((error) => {
-  //     console.error(error);
-  //   });
-  // }, [uid])
-
-  // useEffect(() => {
-  //   const userTasksRef = ref(db, `/${uid}`);
-
-  //   onValue(userTasksRef, (snapshot) => {
-  //     const tasks = snapshot.val();
-  //     setData(tasks);
-  //   });
-  // }, [])
+  const db = getDatabase(firebaseApp);
 
 
   useEffect(() => {
-    console.log(data)
+    const dbRef = ref(db);
+
+    setLoading(true);
+
+    get(child(dbRef, `/${uid}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        setData(snapshot.val());
+      } else {
+        // eslint-disable-next-line
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      // eslint-disable-next-line
+      console.error(error);
+    });
+
+    setLoading(false);
+     // eslint-disable-next-line
+  }, [uid])
+
+  useEffect(() => {
+    const userTasksRef = ref(db, `/${uid}`);
+
+    onValue(userTasksRef, (snapshot) => {
+      const tasks = snapshot.val();
+      setData(tasks);
+    });
+    // eslint-disable-next-line
+  }, [])
+
+
+  useEffect(() => {
     if (data) {
-      data.map((item) => {
+      Object.values(data).map((item) => {
         if (now.getTime() === new Date(item.date.split('-')).getTime()) {
-          update(uid, {
+          update(ref(db, `/${uid}/${item.id}`), {
             ...item,
             'isWarning': true
           });
         }
 
         if (now > new Date(item.date.split('-'))) {
-          update(uid, {
+          update(ref(db, `/${uid}/${item.id}`), {
             ...item,
             'isWarning': false,
             'isMiss': true
@@ -77,10 +81,11 @@ const MainPage = () => {
         return item
     })
   }
+  // eslint-disable-next-line
   }, [data])
 
   const handleEdit = (id) => {
-    data.map((item) => {
+    Object.values(data).map((item) => {
       if (item.id === id) {
         dispatch(taskData({
           ...item,
@@ -101,7 +106,7 @@ const MainPage = () => {
       <div className={s.listContainer}>
         {isLoading && <div className={s.spinner}> <Spinner /> </div>}
         {
-          data && data.map((item) => (
+          data && Object.values(data).map((item) => (
               <Task
                 key={item.id}
                 id={item.id}

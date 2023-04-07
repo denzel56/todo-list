@@ -1,14 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { taskApi } from "../taskServices/taskApi";
+// eslint-disable-next-line
 import taskSlice from "./taskSlice";
 
 const store = configureStore({
   reducer: {
     task: taskSlice,
-    [taskApi.reducerPath]: taskApi.reducer,
   },
-  middleware: (getDefaultMiddlware) =>
-    getDefaultMiddlware().concat(taskApi.middleware)
 })
 
 

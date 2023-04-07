@@ -2,34 +2,33 @@ import React from "react";
 import cn from "classnames";
 import PropTypes from 'prop-types';
 
+import { getDatabase, ref, remove, update } from "firebase/database";
+import { firebaseApp } from "../../database/firebase";
+
 import { ReactComponent as DelIcon } from '../../assets/plus-solid.svg';
 import { ReactComponent as DoneIcon } from '../../assets/check-solid.svg';
 import { ReactComponent as EditIcon } from '../../assets/pen-solid.svg';
 import { ReactComponent as WarningIcon } from '../../assets/warning.svg';
 
-import { useDeleteTaskMutation, useUpdateTaskMutation } from "../../taskServices/taskApi";
-
 import s from './style.module.css';
 
 const Task = ({ id, title, date, isDone, isMiss, isWarning, onEdit }) => {
   const uid = localStorage.getItem('todoUid');
-
-  const [remove] = useDeleteTaskMutation();
-  const [update] = useUpdateTaskMutation();
+  const db = getDatabase(firebaseApp);
 
   const handleClickDone = () => {
-    update({
+    update(ref(db, `/${uid}/${id}`), {
       'isDone': !isDone,
       id,
-    })
+    });
   }
 
   const handleClickDel = () => {
-    remove(uid, id);
+    remove(ref(db, `/${uid}/${id}`))
   }
 
   const handleClickEdit = () => {
-    if(onEdit && onEdit()) {
+    if(onEdit) {
       onEdit(id);
     };
   }
