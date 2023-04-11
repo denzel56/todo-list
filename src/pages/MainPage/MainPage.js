@@ -1,6 +1,7 @@
 import { React, useEffect, useState} from 'react';
 import { getDatabase, ref, onValue, child, get, update } from 'firebase/database';
 import { useDispatch } from 'react-redux';
+import { NotificationContainer } from 'react-notifications';
 import { firebaseApp } from '../../database/firebase';
 
 
@@ -8,6 +9,7 @@ import { taskData } from '../../store/taskSlice';
 
 import { ReactComponent as Spinner } from '../../assets/spinner-solid.svg'
 
+import Header from '../../components/Header';
 import Form from '../../components/Form';
 import Task from '../../components/Task';
 
@@ -98,33 +100,37 @@ const MainPage = () => {
   }
 
   return (
-    <div className={s.root}>
-      <h1>ToDo List</h1>
-      <Form
-        isEdit
-      />
-      <div className={s.listContainer}>
-        {isLoading && <div className={s.spinner}> <Spinner /> </div>}
-        {
-          data && Object.values(data).map((item) => (
-              <Task
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                description={item.description}
-                date={item.date}
-                fileUrl={item.fileUrl}
-                fileName={item.fileName}
-                isDone={item.isDone}
-                isMiss={item.isMiss}
-                isWarning={item.isWarning}
-                onEdit={handleEdit}
-              />
+    <>
+      <Header />
+      <NotificationContainer />
+      <div className={s.root}>
+        <h1>ToDo List</h1>
+        <Form
+          isEdit
+        />
+        <div className={s.listContainer}>
+          {isLoading && <div className={s.spinner}> <Spinner /> </div>}
+          {
+            data && Object.values(data).map((item) => (
+                <Task
+                  key={item.id}
+                  id={item.id}
+                  title={item.title}
+                  description={item.description}
+                  date={item.date}
+                  fileUrl={item.fileUrl}
+                  fileName={item.fileName}
+                  isDone={item.isDone}
+                  isMiss={item.isMiss}
+                  isWarning={item.isWarning}
+                  onEdit={handleEdit}
+                />
+              )
             )
-          )
-        }
+          }
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

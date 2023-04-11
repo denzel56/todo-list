@@ -1,0 +1,13 @@
+.root {
+  width: 100%;
+  height: 7vh;
+  padding: 0 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: #2af7ed;
+}
+
+.link {
+  color: #828282;
+}

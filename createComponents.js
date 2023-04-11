@@ -8,7 +8,7 @@ const componentTemplate = `import s from './${componentName}.module.scss';
 const ${componentName} = () => {
   return (
     <div className={s.root}>
-
+      
     </div>
   );
 };
@@ -20,13 +20,13 @@ const indexTemplate = `import ${componentName} from './${componentName}';
 export default ${componentName};`;
 
 const createComponents = new Promise((resolve, reject) => {
-  const path = `./src/${componentName}`;
+  const path = `./src/${componentPath}/${componentName}`;
 
   if (fs.existsSync(path)) {
     reject('Components is exist');
   }
 
-  fs.mkdir(path, { recursive: true }, (err) => {
+  fs.mkdir(path, { recursive: true}, (err) => {
     if (err !== null) {
       reject(err);
     } else {
@@ -62,3 +62,8 @@ createComponents.then(async (dirPath) => {
 }).catch((err) => {
   console.log('####: THIS IS ERROR - ', err);
 })
+
+
+
+
+

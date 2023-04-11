@@ -1,12 +1,16 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EmailAuthProvider, linkWithCredential, signInWithEmailAndPassword } from "firebase/auth";
+import { NotificationContainer, NotificationManager } from "react-notifications";
+import 'react-notifications/lib/notifications.css'
 
 import Input from "../../components/Input";
+import Header from "../../components/Header";
 
 import auth from "../../database/firebase";
 
 import s from './AuthPage.module.css';
+
 
 
 const AuthPage = () => {
@@ -35,7 +39,7 @@ const AuthPage = () => {
     const {email, password} = form;
 
     if (form.password.length < 6) {
-      alert('пароль дожен содержать не меньше 6 симвоов');
+      NotificationManager.success('пароль дожен содержать не меньше 6 симвоов', 'Warning')
       return
     }
 
@@ -43,11 +47,12 @@ const AuthPage = () => {
     if (ref.current.name === 'Register') {
       const credential = EmailAuthProvider.credential(email, password);
       linkWithCredential(auth.currentUser, credential)
-      .then((usercred) => {
-        const {user} = usercred;
-        console.log("Anonymous account successfully upgraded", user);
-      }).catch((error) => {
-        console.log("Error upgrading anonymous account", error);
+      .then(() => {
+        NotificationManager.success('Anonymous account successfully upgraded', 'Sucess');
+        navigate('/');
+      }).catch(() => {
+
+        NotificationManager.error('Error upgrading anonymous account', 'Error')
       });
     }
 
@@ -55,12 +60,12 @@ const AuthPage = () => {
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
           // Signed in
+          NotificationManager.success('Sucess');
           navigate('/');
         })
         .catch((error) => {
-          const errorCode = error.code;
           const errorMessage = error.message;
-          console.error(errorCode, errorMessage);
+          NotificationManager.error(errorMessage, 'Error')
         });
     }
 
@@ -77,50 +82,54 @@ const AuthPage = () => {
   }
 
   return (
-    <div className={s.root}>
-      {
-        isLogin ? <h1>Login</h1> : <h1>Register</h1>
-      }
-      <form
-        onSubmit={handleSubmit}
-        ref={ref}
-        name={isLogin ? 'Login' : 'Register'}
-      >
-        <div className={s.inputWrap}>
-          <Input
-            type="email"
-            name="email"
-            placeholder="Введите логин"
-            defaultValue={form.email}
-            onChange={handleChange}
-          />
-          <Input
-            type="password"
-            name="password"
-            placeholder="Укажите пароль"
-            defaultValue={form.password}
-            onChange={handleChange}
-          />
-          <button
-            type="submit"
-            className={s.authButton}
-          >
-            {isLogin ? 'Signin' : 'Signup'}
-          </button>
-          <a href='s#'
-            className={s.regLink}
-            onClick={(e) => {
-              e.preventDefault();
-              setLogin(!isLogin);
-            }}
-          >
-            {
-              isLogin ? 'Register' : 'Login'
-            }
-          </a>
-        </div>
-      </form>
-    </div>
+    <>
+      <Header />
+      <NotificationContainer />
+      <div className={s.root}>
+        {
+          isLogin ? <h1>Login</h1> : <h1>Register</h1>
+        }
+        <form
+          onSubmit={handleSubmit}
+          ref={ref}
+          name={isLogin ? 'Login' : 'Register'}
+        >
+          <div className={s.inputWrap}>
+            <Input
+              type="email"
+              name="email"
+              placeholder="Введите логин"
+              defaultValue={form.email}
+              onChange={handleChange}
+            />
+            <Input
+              type="password"
+              name="password"
+              placeholder="Укажите пароль"
+              defaultValue={form.password}
+              onChange={handleChange}
+            />
+            <button
+              type="submit"
+              className={s.authButton}
+            >
+              {isLogin ? 'Signin' : 'Signup'}
+            </button>
+            <a href='s#'
+              className={s.regLink}
+              onClick={(e) => {
+                e.preventDefault();
+                setLogin(!isLogin);
+              }}
+            >
+              {
+                isLogin ? 'Register' : 'Login'
+              }
+            </a>
+          </div>
+        </form>
+      </div>
+    </>
   )
 }
 
