@@ -27,7 +27,8 @@ const Header = () => {
     if (auth && auth.currentUser) {
       if (!auth.currentUser.isAnonymous) {
         return (
-          <Link to='/' onClick={handleClickOut} >Выйти</Link>
+          <Link to='/' className={s.link}
+            onClick={handleClickOut} >Выйти</Link>
         )
       }
     }

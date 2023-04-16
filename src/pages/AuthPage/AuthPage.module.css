@@ -1,8 +1,7 @@
 .root {
   width: 400px;
   margin: 0 auto;
-  margin-top: 25%;
-  transform: translateY(-50%);
+  margin-top: 10%;
   padding: 15px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
   border-radius: 21px;
